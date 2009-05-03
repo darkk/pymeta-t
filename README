@@ -1,0 +1,81 @@
+== Description ==
+
+That's trivial meta-component to proxy all incoming stanzas in following way:
+
+<stanza from="user@example.org" to="srv.host.com@meta.example.org" />
+ to
+<stanza from="user\40example.org@meta.example.org" to="srv.host.com" />
+
+<stanza from="srv.host.com" to="user\40example.org@meta.example.org" />
+ to
+<stanza from="srv.host.com@meta.example.org" to="user@example.org" />
+
+
+This mapping is required to make services like srv.host.com accessible
+with JIDs like node@somewhere.org. The ugly hack is required for GTalk
+users to be able to use various jabber transports. See following threads
+for details:
+http://www.google.com/support/forum/p/Talk/thread?tid=28ea57ad8c3ad591
+http://www.google.com/support/forum/p/Talk/thread?tid=0697c2950e983d95
+
+Google engineers were informed about the problem long ago, but the issue
+remained unfixed for more then half a year, so this meta-transport
+appeared as a temporary workaround. See following links for technical
+details:
+http://darkk.livejournal.com/50477.html#cutid1
+http://mail.jabber.org/pipermail/operators/2009-April/000507.html
+
+
+== Requirements ==
+
+- jabber server supporting XEP-0114
+  Tested with ejabberd-2.0.1
+
+- python
+  URL: http://www.python.org/
+  Tested with python-2.5.2
+
+- twisted & twisted.words >= 8.0
+  URL: http://twistedmatrix.com
+  Tested with python-twisted-words-8.1.0
+
+- Wokkel >= 0.6.0
+  URL: http://wokkel.ik.nu
+  Tested with wokkel-0.6.0
+
+The project itself is currently hosted at github:
+http://github.com/darkk/pymeta-t/
+
+
+== HOWTO ==
+
+Edit your jabber server config, edit config.py and run pymeta-t.py using
+twistd in alike way:
+
+# twistd --python=pymeta-t.py \
+         --logfile=/var/log/pymetat/pymetat.log \
+         --pidfile=/var/run/pymetat/pymetat.pid \
+         --uid=pymetat --gid=pymetat
+
+See twistd(1) manpage for extra information about log rotation.
+
+
+== Known glitches ==
+
+gajim does not expect to see any services at JIDs like node@example.org,
+so it disables `register' button making the registration within
+transport impossible. It is possible to register within transport using
+Psi (http://psi-im.org).
+
+You should be careful if you want to limit access to meta-transport
+using ejabberd ACLs. You should remember that the trasnport uses same
+domain both for incoming and for outgoing messages, moreover, incorrect
+ACL setup may crash your ejabberd instance. See EJAB-930 for details:
+https://support.process-one.net/browse/EJAB-930
+
+
+== Author ==
+
+Leonid Evdokimov
+mailto:leon@darkk.net.ru
+xmpp:leon@darkk.net.ru
