@@ -27,6 +27,7 @@ http://mail.jabber.org/pipermail/operators/2009-April/000507.html
 
 By the way, the issue was fixed quite soon after pymeta-t release.
 Everything was working fine on 31st of May, 2009.
+The problem arised from resolved on ~11th of June, 2009.
 
 
 == Requirements ==
@@ -69,6 +70,9 @@ gajim does not expect to see any services at JIDs like node@example.org,
 so it disables `register' button making the registration within
 transport impossible. It is possible to register within transport using
 Psi (http://psi-im.org).
+
+Psi has troubles while removing subscriptions from foo\40bar.org@meta.42.org
+JIDs. See FS-963 for details: http://flyspray.psi-im.org/task/963
 
 You should be careful if you want to limit access to meta-transport
 using ejabberd ACLs. You should remember that the trasnport uses same
